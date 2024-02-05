@@ -116,6 +116,14 @@ export default {
 }
 ```
 
+add to top of src/index.css
+
+```
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+```
+
 ## Install Storybook
 
 ```
@@ -123,4 +131,3 @@ npx storybook@latest init
 npm i -D @storybook/manager-api @storybook/theming
 npm i -D @storybook/addon-a11y
 ```
-
