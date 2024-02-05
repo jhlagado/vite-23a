@@ -1,4 +1,6 @@
-# install vite, vitest,
+# installing vite, vitest, msw
+
+based on https://www.youtube.com/watch?v=Aqz43LVbnTk
 
 npm create vite@latest
 npm i -D vitest
@@ -87,3 +89,38 @@ import { handlers } from "./handlers";
 export const server = setupServer(...handlers);
 
 ```
+
+## install Tailwind CSS
+
+npm i -D postcss-cli autoprefixer tailwindcss
+npx tailwindcss init -p
+
+tailwind.config.js
+
+```
+/** @type {import('tailwindcss').Config} */
+export default {
+  mode: 'jit',
+  darkMode: 'media',
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
+  theme: {
+    extend: {
+      colors: {
+      }
+    },
+  },
+  plugins: [],
+}
+```
+
+## Install Storybook
+
+```
+npx storybook@latest init
+npm i -D @storybook/manager-api @storybook/theming
+npm i -D @storybook/addon-a11y
+```
+
