@@ -1,10 +1,10 @@
 import { Meta, StoryObj } from "@storybook/react";
 
-import PostList from "./PostList";
+import Accessible from "./Accessible";
 
-const meta: Meta<typeof PostList> = {
-  component: PostList,
-  title: "PostList",
+const meta: Meta<typeof Accessible> = {
+  component: Accessible,
+  title: "Accessible",
   tags: ["autodocs"],
 };
 export default meta;
@@ -12,6 +12,6 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const MessageListStory: Story = {
-  name: "PostList",
-  render: () => <PostList />,
+  name: "Accessible",
+  render: () => <Accessible />,
 };
