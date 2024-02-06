@@ -2,7 +2,7 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import Home from "./Home";
 import { HttpResponse, http } from "msw";
-import { server } from "../test/mocks/server";
+import { server } from "../../test/mocks/server";
 
 describe("Home", () => {
   it("should add a new todo", async () => {

@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from "react";
-import type { Todo } from "../../types/Todo";
-import postTodo from "../../lib/postTodo/postTodo";
+import type { Todo } from "../types/Todo";
+import postTodo from "../lib/postTodo/postTodo";
 
 interface Props {
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;

@@ -1,7 +1,7 @@
 import { FaTrash } from "react-icons/fa";
-import type { Todo } from "../../types/Todo";
-import updateTodo from "../../lib/updateTodo/updateTodo";
-import deleteTodo from "../../lib/deleteTodo/deleteTodo";
+import type { Todo } from "../types/Todo";
+import updateTodo from "../lib/updateTodo/updateTodo";
+import deleteTodo from "../lib/deleteTodo/deleteTodo";
 
 interface Props {
   todo: Todo;

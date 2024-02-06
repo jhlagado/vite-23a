@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import Home from "./Home";
+import TodoList from "./xtodo/TodoList";
 
 export const TODOS_URL = "https://dummyjson.com/todos";
 
@@ -18,7 +18,8 @@ export default function MainPanel() {
 
   return (
     <div className="p-4">
-      <Home />
+      {/* <Home /> */}
+      <TodoList />
       <div className="text-green-500">Todo list: {todos.length}</div>
       <label htmlFor="inc">Inc</label>
       <button

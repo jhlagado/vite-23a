@@ -1,6 +1,6 @@
 import { HttpResponse, http } from "msw";
-import { type Todo } from "../../types/Todo";
 import { TODOS_URL } from "../../components/MainPanel";
+import { Todo } from "../../components/todo/types/Todo";
 
 export const handlers = [
   http.get(TODOS_URL, () => {

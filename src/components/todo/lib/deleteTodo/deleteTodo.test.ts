@@ -1,6 +1,6 @@
 import { HttpResponse, http } from "msw";
-import { server } from "../../test/mocks/server";
 import deleteTodo from "./deleteTodo";
+import { server } from "../../../../test/mocks/server";
 
 const mockTodo = {
   userId: 1,

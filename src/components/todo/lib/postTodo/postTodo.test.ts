@@ -1,5 +1,5 @@
 import { HttpResponse, http } from "msw";
-import { server } from "../../test/mocks/server";
+import { server } from "../../../../test/mocks/server";
 import postTodo from "./postTodo";
 
 describe("postTodo lib function", () => {
