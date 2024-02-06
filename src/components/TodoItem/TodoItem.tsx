@@ -1,8 +1,7 @@
 
-// import { FaTrash } from "react-icons/fa"
+import { FaTrash } from "react-icons/fa"
 import { ChangeEvent, MouseEvent } from 'react'
 import type { Todo } from "../../types/Todo"
-
 
 type Props = {
     todo: Todo,
@@ -40,7 +39,7 @@ export default function TodoItem({ todo, setTodos }: Props) {
                     data-testid="delete-button"
                     onClick={handleDelete}
                     className="p-3 text-xl rounded-2xl text-black border-solid border-black border-2 max-w-xs bg-red-400 hover:cursor-pointer hover:bg-red-300">
-                    {/* <FaTrash /> */}
+                    <FaTrash />
                 </button>
             </div>
         </article>
