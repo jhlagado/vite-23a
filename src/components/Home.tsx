@@ -1,36 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { type Todo } from "../types/Todo";
 import AddTodo from "./AddTodo/AddTodo";
 import TodoList from "./TodoList/TodoList";
+import fetchTodos from "../lib/fetchTodos/fetchTodos";
 
 export default function Home() {
-  const [todos, setTodos] = useState<Todo[]>([
-    {
-      userId: 1,
-      title: "Wave hello! 👋",
-      completed: false,
-      id: 1,
-    },
-    {
-      userId: 1,
-      title: "Get Coffee ☕☕☕",
-      completed: false,
-      id: 2,
-    },
-    {
-      userId: 1,
-      title: "Go to Work ⚒",
-      completed: false,
-      id: 3,
-    },
-    {
-      userId: 1,
-      title: "Write Code 💻",
-      completed: false,
-      id: 4,
-    },
-  ]);
-
+  const [todos, setTodos] = useState<Todo[]>([]);
+  useEffect(() => {
+    async function getTodos() {
+      const todos = await fetchTodos();
+      if (todos?.length) setTodos(todos);
+    }
+    getTodos();
+  }, []);
   return (
     <>
       <AddTodo setTodos={setTodos} />
