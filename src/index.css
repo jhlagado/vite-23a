@@ -17,10 +17,10 @@
   }
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
-
+/* @import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
+ */
 body {
-  font-family: 'Nunito', sans-serif;
+  /* font-family: 'Nunito', sans-serif; */
   font-size: 1.5rem;
   background-color: #64748B;
   color: #18181B;
@@ -58,7 +58,7 @@ form, article {
   align-items: center;
 }
 
-input[type="checkbox"] {
+/* input[type="checkbox"] {
   min-width: 30px;
   min-height: 30px;
   margin-right: 1rem;
@@ -70,16 +70,16 @@ button {
   border: 1px solid #18181B;
   border-radius: 10%;
   cursor: pointer;
-}
+} */
 
-.trash {
+/* .trash {
   background-color: #F8FAFC;
   color: #EF4444;
 }
 
 .trash:focus, .trash:hover {
   filter:brightness(120%)
-}
+} */
 
 form {
   padding: 1rem;
@@ -100,14 +100,14 @@ form label {
   padding-right: 30px;
 }
 
-input[type="text"] {
+/* input[type="text"] {
   width: 100%;
   padding: 0.5rem;
   border-radius: 10px;
   border: 0.5px solid #18181B;
-}
+} */
 
-.submit {
+/* .submit {
   background-color: #F8FAFC;
   color: gray;
 }
@@ -115,4 +115,4 @@ input[type="text"] {
 .submit:focus, .submit:hover {
   background-color: limegreen;
   color: #F8FAFC;
-}
+} */

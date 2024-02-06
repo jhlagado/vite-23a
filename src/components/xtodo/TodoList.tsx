@@ -8,7 +8,7 @@ import {
   deleteTodo,
   getTodos,
   updateTodo,
-} from "./todosAPI";
+} from "./todosApi";
 import { FaTrash, FaUpload } from "react-icons/fa";
 
 const TodoList = () => {
@@ -79,13 +79,14 @@ const TodoList = () => {
       <div className="new-todo">
         <input
           type="text"
+          className="w-full p-2 rounded-sm border-solid border-2 border-slate-800"
           id="new-todo"
           value={newTodo}
           onChange={(e) => setNewTodo(e.target.value)}
           placeholder="Enter new todo"
         />
       </div>
-      <button className="min-w-12 min-h-12 border-slate-300 border-2 rounded-md cursor-pointer flex justify-center items-center bg-slate-100 text-slate-500 focus:text-lime-500 hover:text-lime-500">
+      <button className="min-w-12 min-h-12 border-2late-300 border-2 rounded-md cursor-pointer flex justify-center items-center bg-slate-100 text-slate-500 focus:text-lime-500 hover:text-lime-500">
         <FaUpload />
       </button>
     </form>
@@ -112,7 +113,7 @@ const TodoList = () => {
             <label htmlFor={String(todo.id)}>{todo.title}</label>
           </div>
           <button
-            className="min-w-12 min-h-12 border-slate-300 border-2 rounded-md cursor-pointer flex justify-center items-center bg-slate-100 text-red-500 focus:brightness-110 hover:brightness-110 transition"
+            className="min-w-12 min-h-12 border-2late-300 border-2 rounded-md cursor-pointer flex justify-center items-center bg-slate-100 text-red-500 focus:brightness-110 hover:brightness-110 transition"
             onClick={() => deleteTodoMutation(todo.id)}
           >
             <FaTrash />
