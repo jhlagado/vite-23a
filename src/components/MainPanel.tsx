@@ -9,8 +9,10 @@ export default function MainPanel() {
 
   useEffect(() => {
     fetch(TODOS_URL)
-      .then((res) => res.json())
-      .then((res) => setTodos(res.todos))
+      .then(async (res) => await res.json())
+      .then((res) => {
+        setTodos(res.todos);
+      })
       .catch(console.log);
   }, []);
 
@@ -19,7 +21,12 @@ export default function MainPanel() {
       <Home />
       <div className="text-green-500">Todo list: {todos.length}</div>
       <label htmlFor="inc">Inc</label>
-      <button id="inc" onClick={() => setCount((count) => count + 1)}>
+      <button
+        id="inc"
+        onClick={() => {
+          setCount((count) => count + 1);
+        }}
+      >
         count is {count}
       </button>
     </div>

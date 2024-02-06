@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { User } from "../../types/User";
+import { type User } from "../../types/User";
 
 export const SERVER_URL = "https://dummyjson.com/users";
 

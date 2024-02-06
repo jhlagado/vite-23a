@@ -1,5 +1,5 @@
 import { HttpResponse, http } from "msw";
-import { Todo } from "../../types/Todo";
+import { type Todo } from "../../types/Todo";
 import { TODOS_URL } from "../../components/MainPanel";
 
 export const handlers = [
@@ -54,7 +54,7 @@ export const handlers = [
     return HttpResponse.json(
       {
         userId: 1,
-        title: title,
+        title,
         completed: false,
         id: 5,
       },

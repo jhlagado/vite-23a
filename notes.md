@@ -131,3 +131,8 @@ npx storybook@latest init
 npm i -D @storybook/manager-api @storybook/theming
 npm i -D @storybook/addon-a11y
 ```
+
+## Install ESLint
+
+npm i -D eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin
+npx eslint --init

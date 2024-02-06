@@ -21,8 +21,10 @@ export default function PostList() {
 
   useEffect(() => {
     fetch("/posts")
-      .then((res) => res.json())
-      .then((data) => setPosts(data));
+      .then(async (res) => await res.json())
+      .then((data) => {
+        setPosts(data);
+      });
   }, []);
 
   return posts.map((post) => <Post key={post.body} post={post} />);
