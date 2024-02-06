@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import MainPanel from "./components/MainPanel";
 import SideBar from "./components/SideBar";
 

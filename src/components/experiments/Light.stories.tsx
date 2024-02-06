@@ -36,7 +36,7 @@ export const Red: Story = {
 };
 
 export const Grouped: Story = {
-  render: (args) => (
+  render: () => (
     <div className="flex flex-col gap-1 border-solid border-2 border-black w-max p-2 bg-slate-600">
       <Light variant="red" />
       <Light variant="yellow" />
