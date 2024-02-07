@@ -2,14 +2,17 @@ import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import useSWR from "swr";
 import { FaTrash, FaUpload } from "react-icons/fa";
-import { Todo, SERVER_URL as cacheKey, getTodos } from "./todosAPI";
+import {
+  Todo,
+  addTodo,
+  SERVER_URL as cacheKey,
+  deleteTodo,
+  getTodos,
+  updateTodo,
+} from "./todosAPI";
 
 import {
-  addTodoOptions,
-  updateTodoOptions,
   deleteTodoOptions,
-  addMutation,
-  updateMutation,
   deleteMutation,
 } from "./todosMutations";
 
@@ -28,7 +31,16 @@ const TodoList = () => {
   const addTodoMutation = async (newTodo: Todo) => {
     if (!todos) return;
     try {
-      await mutate(addMutation(newTodo, todos), addTodoOptions(newTodo));
+      await mutate(
+        async () => {
+          const added = await addTodo(newTodo);
+          return [added, ...todos].sort((a, b) => b.id - a.id);
+        },
+        {
+          optimisticData: [newTodo, ...todos],
+          revalidate: false,
+        }
+      );
       toast.success("Success! Added a new item", {
         duration: 2000,
         icon: "🎉",
@@ -38,12 +50,21 @@ const TodoList = () => {
     }
   };
 
-  const updateTodoMutation = async (updatedTodo: Todo) => {
+  const updateTodoMutation = async (todo: Todo) => {
     if (!todos) return;
     try {
       await mutate(
-        updateMutation(updatedTodo, todos),
-        updateTodoOptions(updatedTodo)
+        async () => {
+          const updated = await updateTodo(todo);
+          const prevTodos = todos.filter((todo) => {
+            return todo.id !== todo.id;
+          });
+          return [...prevTodos, updated].sort((a, b) => b.id - a.id);
+        },
+        {
+          optimisticData: [todo, ...todos],
+          revalidate: false,
+        }
       );
       toast.success("Success! Updated item", {
         duration: 2000,
@@ -57,6 +78,23 @@ const TodoList = () => {
   const deleteTodoMutation = async (id: number) => {
     if (!todos) return;
     try {
+      await mutate(
+        async () => {
+          await deleteTodo(id);
+          return todos.filter((todo) => {
+            return todo.id !== id;
+          });
+        },
+        {
+          optimisticData: (todos: Todo[] = []) => {
+            return todos.filter((todo) => {
+              return todo.id !== id;
+            });
+          },
+          revalidate: false,
+        }
+      );
+
       await mutate(deleteMutation(id, todos), deleteTodoOptions(id));
       toast.success("Success! Deleted item", {
         duration: 2000,
