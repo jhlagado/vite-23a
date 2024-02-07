@@ -3,6 +3,12 @@ import TodoList from "./xtodo/TodoList";
 
 export const TODOS_URL = "https://dummyjson.com/todos";
 
+import {preload} from 'swr'
+import { SERVER_URL as cacheKey, getTodos} from "./xtodo/todosAPI";
+
+preload(cacheKey, getTodos);
+
+
 export default function MainPanel() {
   const [count, setCount] = useState(0);
   const [todos, setTodos] = useState([]);

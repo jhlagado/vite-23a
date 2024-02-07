@@ -1,15 +1,17 @@
 import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import useSWR from "swr";
-import {
-  Todo,
-  addTodo,
-  SERVER_URL as cacheKey,
-  deleteTodo,
-  getTodos,
-  updateTodo,
-} from "./todosApi";
 import { FaTrash, FaUpload } from "react-icons/fa";
+import { Todo, SERVER_URL as cacheKey, getTodos } from "./todosAPI";
+
+import {
+  addTodoOptions,
+  updateTodoOptions,
+  deleteTodoOptions,
+  addMutation,
+  updateMutation,
+  deleteMutation,
+} from "./todosMutations";
 
 const TodoList = () => {
   const [newTodo, setNewTodo] = useState("");
@@ -20,13 +22,13 @@ const TodoList = () => {
     data: todos,
     mutate,
   } = useSWR(cacheKey, getTodos, {
-    onSuccess: (data: Todo[]) => data.sort((a, b) => b.id - a.id),
+    // onSuccess: (data: Todo[]) => data.sort((a, b) => b.id - a.id),
   });
 
   const addTodoMutation = async (newTodo: Todo) => {
+    if (!todos) return;
     try {
-      await addTodo(newTodo);
-      mutate();
+      await mutate(addMutation(newTodo, todos), addTodoOptions(newTodo));
       toast.success("Success! Added a new item", {
         duration: 2000,
         icon: "🎉",
@@ -37,9 +39,12 @@ const TodoList = () => {
   };
 
   const updateTodoMutation = async (updatedTodo: Todo) => {
+    if (!todos) return;
     try {
-      await updateTodo(updatedTodo);
-      mutate();
+      await mutate(
+        updateMutation(updatedTodo, todos),
+        updateTodoOptions(updatedTodo)
+      );
       toast.success("Success! Updated item", {
         duration: 2000,
         icon: "🎉",
@@ -50,9 +55,9 @@ const TodoList = () => {
   };
 
   const deleteTodoMutation = async (id: number) => {
+    if (!todos) return;
     try {
-      await deleteTodo(id);
-      mutate();
+      await mutate(deleteMutation(id, todos), deleteTodoOptions(id));
       toast.success("Success! Deleted item", {
         duration: 2000,
         icon: "🎉",
@@ -68,7 +73,7 @@ const TodoList = () => {
       userId: 1,
       title: newTodo,
       completed: false,
-      id: Math.floor(Math.random() * 9999),
+      id: 9999, // ignored
     });
     setNewTodo("");
   };
@@ -97,7 +102,8 @@ const TodoList = () => {
   } else if (error) {
     content = <p>{error.message}</p>;
   } else {
-    content = todos?.map((todo) => {
+    const list = [...(todos || [])].sort((a, b) => b.id - a.id);
+    content = list.map((todo) => {
       return (
         <article key={todo.id}>
           <div className="todo">

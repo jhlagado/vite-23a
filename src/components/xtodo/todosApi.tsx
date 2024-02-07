@@ -7,33 +7,45 @@ export type Todo = {
   userId: number;
 };
 
+const delay = (millis = 800) =>
+  new Promise((res: Function) => {
+    setTimeout(() => {
+      res();
+    }, millis);
+  });
+
 export const getTodos = async (): Promise<Todo[]> => {
-  const response = await fetch(SERVER_URL);
+  await delay(800);
+  const response = await fetch(`${SERVER_URL}?_sort=-id`);
   return await response.json();
 };
 
 export const addTodo = async ({
-  id,
   title,
   completed,
   userId,
 }: Todo): Promise<Todo> => {
+  await delay(800);
+  // if (Math.random() < 0.5) throw new Error("Failed to add new item!");
   const response = await fetch(SERVER_URL, {
     method: "POST",
     body: JSON.stringify({
-      id,
       title,
       completed,
       userId,
+      id: Date.now(),
     }),
     headers: {
       "Content-type": "application/json; charset=UTF-8",
     },
   });
-  return await response.json();
+  const newTodo = await response.json();
+  // newTodo.id = Date.now();
+  return newTodo;
 };
 
 export const updateTodo = async (todo: Todo): Promise<Todo> => {
+  await delay(800);
   const response = await fetch(`${SERVER_URL}/${todo.id}`, {
     method: "PUT",
     body: JSON.stringify(todo),
@@ -45,6 +57,7 @@ export const updateTodo = async (todo: Todo): Promise<Todo> => {
 };
 
 export const deleteTodo = async (id: number): Promise<Todo> => {
+  await delay(800);
   const response = await fetch(`${SERVER_URL}/${id}`, {
     method: "DELETE",
   });
