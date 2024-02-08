@@ -1,5 +1,5 @@
-import { HttpResponse, http } from "msw";
-import { SERVER_URL, Todo } from "../../components/xtodo/todosApi";
+// import { HttpResponse, http } from "msw";
+// import { SERVER_URL, Todo } from "../../components/xtodo/todosApi";
 
 export const handlers = [
   // http.get(`${SERVER_URL}`, () => {

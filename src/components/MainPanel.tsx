@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import TodoList from "./xtodo/TodoList";
 
 import { preload } from "swr";
