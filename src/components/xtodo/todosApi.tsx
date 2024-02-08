@@ -1,14 +1,14 @@
 export const SERVER_URL = "http://localhost:3500/todos";
 
 export type Todo = {
-  id: number;
+  id?: number;
   title: string;
   completed: boolean;
   userId: number;
   created?: number;
 };
 
-const delay = (millis = 800) =>
+export const delay = (millis = 800) =>
   new Promise((res: Function) => {
     setTimeout(() => {
       res();
@@ -39,8 +39,7 @@ export const addTodo = async ({
       "Content-type": "application/json; charset=UTF-8",
     },
   });
-  const newTodo = await response.json();
-  return newTodo;
+  return await response.json();
 };
 
 export const updateTodo = async (todo: Todo): Promise<Todo> => {
@@ -55,7 +54,8 @@ export const updateTodo = async (todo: Todo): Promise<Todo> => {
 };
 
 export const deleteTodo = async (id: number): Promise<unknown> => {
-  return await fetch(`${SERVER_URL}/${id}`, {
+  const response = await fetch(`${SERVER_URL}/${id}`, {
     method: "DELETE",
   });
+  return await response.json();
 };

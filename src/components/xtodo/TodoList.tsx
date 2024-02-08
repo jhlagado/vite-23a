@@ -2,44 +2,27 @@ import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import useSWR from "swr";
 import { FaTrash, FaUpload } from "react-icons/fa";
+import { Todo, SERVER_URL as cacheKey, getTodos } from "./todosApi";
 import {
-  Todo,
-  addTodo,
-  SERVER_URL as cacheKey,
-  deleteTodo,
-  getTodos,
-  updateTodo,
-} from "./todosAPI";
-
-import {
-  deleteTodoOptions,
-  deleteMutation,
-} from "./todosMutations";
+  addTodoMutation,
+  addTodoMutationOptions,
+  deleteTodoMutation,
+  deleteTodoMutationOptions,
+  updateTodoMutation,
+  updateTodoMutationOptions,
+} from "./mutations";
 
 const TodoList = () => {
   const [newTodo, setNewTodo] = useState("");
 
-  const {
-    isLoading,
-    error,
-    data: todos,
-    mutate,
-  } = useSWR(cacheKey, getTodos, {
-    // onSuccess: (data: Todo[]) => data.sort((a, b) => b.id - a.id),
-  });
+  const { isLoading, error, data: todos, mutate } = useSWR(cacheKey, getTodos);
 
-  const addTodoMutation = async (newTodo: Todo) => {
+  const handleAdd = async (newTodo: Todo) => {
     if (!todos) return;
     try {
       await mutate(
-        async () => {
-          const added = await addTodo(newTodo);
-          return [added, ...todos].sort((a, b) => b.id - a.id);
-        },
-        {
-          optimisticData: [newTodo, ...todos],
-          revalidate: false,
-        }
+        addTodoMutation(newTodo, todos),
+        addTodoMutationOptions(newTodo, todos)
       );
       toast.success("Success! Added a new item", {
         duration: 2000,
@@ -50,21 +33,12 @@ const TodoList = () => {
     }
   };
 
-  const updateTodoMutation = async (todo: Todo) => {
+  const handleUpdate = async (updatedTodo: Todo) => {
     if (!todos) return;
     try {
       await mutate(
-        async () => {
-          const updated = await updateTodo(todo);
-          const prevTodos = todos.filter((todo) => {
-            return todo.id !== todo.id;
-          });
-          return [...prevTodos, updated].sort((a, b) => b.id - a.id);
-        },
-        {
-          optimisticData: [todo, ...todos],
-          revalidate: false,
-        }
+        updateTodoMutation(updatedTodo, todos),
+        updateTodoMutationOptions(updatedTodo, todos)
       );
       toast.success("Success! Updated item", {
         duration: 2000,
@@ -75,27 +49,13 @@ const TodoList = () => {
     }
   };
 
-  const deleteTodoMutation = async (id: number) => {
+  const handleDelete = async (id: number) => {
     if (!todos) return;
     try {
       await mutate(
-        async () => {
-          await deleteTodo(id);
-          return todos.filter((todo) => {
-            return todo.id !== id;
-          });
-        },
-        {
-          optimisticData: (todos: Todo[] = []) => {
-            return todos.filter((todo) => {
-              return todo.id !== id;
-            });
-          },
-          revalidate: false,
-        }
+        deleteTodoMutation(id, todos),
+        deleteTodoMutationOptions(id, todos)
       );
-
-      await mutate(deleteMutation(id, todos), deleteTodoOptions(id));
       toast.success("Success! Deleted item", {
         duration: 2000,
         icon: "🎉",
@@ -107,7 +67,7 @@ const TodoList = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    addTodoMutation({
+    handleAdd({
       userId: 1,
       title: newTodo,
       completed: false,
@@ -140,7 +100,7 @@ const TodoList = () => {
   } else if (error) {
     content = <p>{error.message}</p>;
   } else {
-    const list = [...(todos || [])].sort((a, b) => b.id - a.id);
+    const list = [...(todos || [])];
     content = list.map((todo) => {
       return (
         <article key={todo.id}>
@@ -151,14 +111,14 @@ const TodoList = () => {
               checked={todo.completed}
               id={String(todo.id)}
               onChange={() =>
-                updateTodoMutation({ ...todo, completed: todo.completed })
+                handleUpdate({ ...todo, completed: !todo.completed })
               }
             />
             <label htmlFor={String(todo.id)}>{todo.title}</label>
           </div>
           <button
             className="min-w-12 min-h-12 border-2late-300 border-2 rounded-md cursor-pointer flex justify-center items-center bg-slate-100 text-red-500 focus:brightness-110 hover:brightness-110 transition"
-            onClick={() => deleteTodoMutation(todo.id)}
+            onClick={() => todo.id && handleDelete(todo.id)}
           >
             <FaTrash />
           </button>

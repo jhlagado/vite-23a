@@ -1,24 +1,8 @@
 import { HttpResponse, http } from "msw";
-import { TODOS_URL } from "../../components/MainPanel";
-import { Todo } from "../../components/todo/types/Todo";
+import { SERVER_URL, Todo } from "../../components/xtodo/todosApi";
 
 export const handlers = [
-  http.get(TODOS_URL, () => {
-    return HttpResponse.json(
-      {
-        todos: [
-          {
-            id: 1,
-            todo: "Do something nice for someone I care about",
-            completed: true,
-            userId: 26,
-          },
-        ],
-      },
-      { status: 200 }
-    );
-  }),
-  http.get("/todos", () => {
+  http.get(`${SERVER_URL}`, () => {
     return HttpResponse.json(
       [
         {
@@ -49,7 +33,7 @@ export const handlers = [
       { status: 200 }
     );
   }),
-  http.post("/todos", async ({ request }) => {
+  http.post(`${SERVER_URL}`, async ({ request }) => {
     const { title } = (await request.json()) as Todo;
     return HttpResponse.json(
       {
@@ -61,7 +45,7 @@ export const handlers = [
       { status: 200 }
     );
   }),
-  http.put("/todos/:id", async ({ request }) => {
+  http.put(`${SERVER_URL}/:id`, async ({ request }) => {
     const { id, userId, title, completed } = (await request.json()) as Todo;
 
     return HttpResponse.json(
@@ -74,7 +58,7 @@ export const handlers = [
       { status: 200 }
     );
   }),
-  http.delete("/todos/:id", ({ params }) => {
+  http.delete(`${SERVER_URL}/:id`, ({ params }) => {
     const { id } = params;
     return HttpResponse.json(
       {
