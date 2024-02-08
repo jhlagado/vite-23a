@@ -1,45 +1,33 @@
 import { Todo, addTodo, deleteTodo, updateTodo } from "./todosApi";
 
-export async function addTodoMutation(newTodo: Todo, todos: Todo[]) {
-  const added = await addTodo(newTodo);
+export const addTodoUtility = (added: Todo, todos: Todo[]) => {
   return [added, ...todos];
+};
+
+export async function addTodoMutation(addedTodo: Todo, todos: Todo[]) {
+  const added = await addTodo(addedTodo);
+  return addTodoUtility(added, todos);
 }
 
-export function addTodoMutationOptions(newTodo: Todo, todos: Todo[]) {
-  return {
-    optimisticData: [newTodo, ...todos],
-    revalidate: false,
-  };
-}
+export const updateTodoUtility = (updated: Todo, todos: Todo[]) => {
+  return todos.map((todo) => {
+    return updated.id === todo.id ? updated : todo;
+  });
+};
 
 export async function updateTodoMutation(updatedTodo: Todo, todos: Todo[]) {
-  const updated = await updateTodo(updatedTodo);
-  return todos.map((todo) => {
-    return updatedTodo.id === todo.id ? updated : todo;
-  });
+  const response = await updateTodo(updatedTodo);
+  return updateTodoUtility(response, todos);
 }
 
-export function updateTodoMutationOptions(updatedTodo: Todo, todos: Todo[]) {
-  return {
-    optimisticData: todos.map((todo) => {
-      return updatedTodo.id === todo.id ? updatedTodo : todo;
-    }),
-    revalidate: false,
-  };
-}
-
-export async function deleteTodoMutation(id: number, todos: Todo[]) {
-  await deleteTodo(id);
+export const deleteTodoUtility = (id: number, todos: Todo[]) => {
   return todos.filter((todo) => {
     return todo.id !== id;
   });
+};
+
+export async function deleteTodoMutation(id: number, todos: Todo[]) {
+  await deleteTodo(id);
+  return deleteTodoUtility(id, todos);
 }
 
-export function deleteTodoMutationOptions(id: number, todos: Todo[]) {
-  return {
-    optimisticData: todos.filter((todo) => {
-      return todo.id !== id;
-    }),
-    revalidate: false,
-  };
-}

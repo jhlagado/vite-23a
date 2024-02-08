@@ -5,11 +5,11 @@ import { FaTrash, FaUpload } from "react-icons/fa";
 import { Todo, SERVER_URL as cacheKey, getTodos } from "./todosApi";
 import {
   addTodoMutation,
-  addTodoMutationOptions,
+  addTodoUtility,
   deleteTodoMutation,
-  deleteTodoMutationOptions,
+  deleteTodoUtility,
   updateTodoMutation,
-  updateTodoMutationOptions,
+  updateTodoUtility,
 } from "./mutations";
 
 const TodoList = () => {
@@ -17,12 +17,15 @@ const TodoList = () => {
 
   const { isLoading, error, data: todos, mutate } = useSWR(cacheKey, getTodos);
 
-  const handleAdd = async (newTodo: Todo) => {
+  const handleAdd = async (addedTodo: Todo) => {
     if (!todos) return;
     try {
       await mutate(
-        addTodoMutation(newTodo, todos),
-        addTodoMutationOptions(newTodo, todos)
+        addTodoMutation(addedTodo, todos),
+        {
+          optimisticData: addTodoUtility(addedTodo, todos),
+          revalidate: false,
+        }
       );
       toast.success("Success! Added a new item", {
         duration: 2000,
@@ -38,7 +41,10 @@ const TodoList = () => {
     try {
       await mutate(
         updateTodoMutation(updatedTodo, todos),
-        updateTodoMutationOptions(updatedTodo, todos)
+        {
+          optimisticData: updateTodoUtility(updatedTodo, todos),
+          revalidate: false,
+        }
       );
       toast.success("Success! Updated item", {
         duration: 2000,
@@ -54,7 +60,10 @@ const TodoList = () => {
     try {
       await mutate(
         deleteTodoMutation(id, todos),
-        deleteTodoMutationOptions(id, todos)
+        {
+          optimisticData: deleteTodoUtility(id, todos),
+          revalidate: false,
+        }
       );
       toast.success("Success! Deleted item", {
         duration: 2000,
