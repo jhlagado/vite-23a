@@ -5,27 +5,12 @@ import { server } from "../../test/mocks/server";
 import { TodoList } from "./TodoList";
 import { SERVER_URL } from "./api";
 
-Object.defineProperty(window, "matchMedia", {
-  writable: true,
-  value: vitest.fn().mockImplementation((query) => ({
-    matches: false,
-    media: query,
-    onchange: null,
-    addListener: vitest.fn(), // Deprecated
-    removeListener: vitest.fn(), // Deprecated
-    addEventListener: vitest.fn(),
-    removeEventListener: vitest.fn(),
-    dispatchEvent: vitest.fn(),
-  })),
-});
-
 describe("TodoList", () => {
   it("should add a new todo", async () => {
     server.use(
       http.get(
         `${SERVER_URL}`,
         () => {
-          console.log(">>>>>>> listing 1");
           return HttpResponse.json(
             [
               {
@@ -43,7 +28,6 @@ describe("TodoList", () => {
         { once: true }
       ),
       http.post(`${SERVER_URL}`, () => {
-        console.log(">>>>>>> adding");
         return HttpResponse.json(
           {
             userId: 2,
@@ -56,7 +40,7 @@ describe("TodoList", () => {
       })
     );
 
-    const res = render(<TodoList />); // ARRANGE
+    render(<TodoList />); // ARRANGE
 
     const input = screen.getByPlaceholderText("Enter new todo");
     await userEvent.type(input, "Get Coffee ☕☕☕");
