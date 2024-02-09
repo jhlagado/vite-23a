@@ -1,11 +1,10 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { HttpResponse, http } from "msw";
 import { server } from "../../test/mocks/server";
 import { TodoList } from "./TodoList";
 import { SERVER_URL } from "./api";
-import { mockTodo } from "../../test/mocks/constants";
-
+\
 Object.defineProperty(window, "matchMedia", {
   writable: true,
   value: vitest.fn().mockImplementation((query) => ({
