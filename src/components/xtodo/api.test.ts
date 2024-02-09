@@ -1,9 +1,8 @@
 import { HttpResponse, http } from "msw";
 import { server } from "../../test/mocks/server";
-import { SERVER_URL, getTodos } from "./todosApi";
+import { SERVER_URL, getTodos } from "./api";
 
 describe("getTodos", () => {
-
   it("should return the correct number of todo items", async () => {
     server.use(
       http.get(`${SERVER_URL}`, () => {

@@ -8,15 +8,15 @@ export type Todo = {
   created?: number;
 };
 
-export const delay = (millis = 800) =>
-  new Promise((res: Function) => {
-    setTimeout(() => {
-      res();
-    }, millis);
-  });
+// export const delay = (millis = 800) =>
+//   new Promise((res: Function) => {
+//     setTimeout(() => {
+//       res();
+//     }, millis);
+//   });
 
 export const getTodos = async (): Promise<Todo[]> => {
-  await delay(800);
+  // await delay();
   const response = await fetch(`${SERVER_URL}?_sort=-created`);
   return await response.json();
 };

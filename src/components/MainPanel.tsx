@@ -1,7 +1,7 @@
-import TodoList from "./xtodo/TodoList";
+import { TodoList } from "./xtodo/TodoList";
 
 import { preload } from "swr";
-import { SERVER_URL as cacheKey, getTodos } from "./xtodo/todosApi";
+import { SERVER_URL as cacheKey, getTodos } from "./xtodo/api";
 
 preload(cacheKey, getTodos);
 

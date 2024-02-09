@@ -1,6 +1,6 @@
 import { HttpResponse, http } from "msw";
 import { server } from "../../test/mocks/server";
-import { SERVER_URL, Todo } from "./todosApi";
+import { SERVER_URL, Todo } from "./api";
 import { mockTodo, mockTodoList } from "../../test/mocks/constants";
 import {
   addTodoMutation,

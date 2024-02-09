@@ -1,4 +1,4 @@
-import { Todo, addTodo, deleteTodo, updateTodo } from "./todosApi";
+import { Todo, addTodo, deleteTodo, updateTodo } from "./api";
 
 export const addTodoUtility = (added: Todo, todos: Todo[]) => {
   return [added, ...todos];
@@ -30,4 +30,3 @@ export async function deleteTodoMutation(id: number, todos: Todo[]) {
   await deleteTodo(id);
   return deleteTodoUtility(id, todos);
 }
-
