@@ -40,113 +40,85 @@ describe("TodoList", () => {
       })
     );
 
-    render(<TodoList />); // ARRANGE
+    render(<TodoList />);
 
     const input = screen.getByPlaceholderText("Enter new todo");
     await userEvent.type(input, "Get Coffee ☕☕☕");
-    expect(input).toHaveValue("Get Coffee ☕☕☕"); // ASSERT
+    expect(input).toHaveValue("Get Coffee ☕☕☕");
 
     const button = screen.getByLabelText("Submit");
     await userEvent.click(button);
-    expect(input).toHaveValue(""); // ASSERT
+    expect(input).toHaveValue("");
     const data = await screen.findByText("Get Coffee ☕☕☕");
     expect(data).toBeInTheDocument();
   });
 
-  // it("should not add a new todo if the request fails", async () => {
-  //   server.use(
-  //     http.post("/todos", () => {
-  //       return new HttpResponse(null, { status: 400 });
-  //     })
-  //   );
-  //   render(<TodoList />); // ARRANGE
+  it("should not add a new todo if the request fails", async () => {
+    server.use(
+      http.post(`${SERVER_URL}`, () => {
+        return new HttpResponse(null, { status: 400 });
+      })
+    );
+    render(<TodoList />);
 
-  //   // ACT
-  //   const input = screen.getByPlaceholderText("Enter new todo");
-  //   await userEvent.type(input, "My new todo");
-  //   expect(input).toHaveValue("My new todo"); // ASSERT
+    const input = screen.getByPlaceholderText("Enter new todo");
+    await userEvent.type(input, "My new todo");
+    expect(input).toHaveValue("My new todo");
 
-  //   // ACT
-  //   const button = screen.getByLabelText("Submit");
-  //   await userEvent.click(button);
-  //   waitFor(() => {
-  //     expect(input).toHaveValue(""); // ASSERT
-  //   });
+    const button = screen.getByLabelText("Submit");
+    await userEvent.click(button);
+    expect(input).toHaveValue("");
 
-  //   const data = await screen.queryByText("My new todo");
-  //   expect(data).not.toBeInTheDocument;
-  // });
+    const data = await screen.queryByText("My new todo");
+    expect(data).not.toBeInTheDocument;
+  });
 
-  // it("should update a todo", async () => {
-  //   render(<TodoList />); // ARRANGE
+  it("should update a todo", async () => {
+    render(<TodoList />);
 
-  //   // ACT
-  //   const checkboxArray = (await screen.findAllByRole(
-  //     "checkbox"
-  //   )) as HTMLInputElement[];
-  //   const checkbox = checkboxArray[0];
-  //   expect(checkbox.checked).toBeFalsy();
-  //   await userEvent.click(checkbox);
-  //   waitFor(() => {
-  //     expect(checkbox.checked).toBeTruthy(); // ASSERT
-  //   });
-  // });
+    const checkboxArray = (await screen.findAllByRole(
+      "checkbox"
+    )) as HTMLInputElement[];
 
-  // it("should not update a todo if request fails", async () => {
-  //   render(<TodoList />); // ARRANGE
+    const checkbox = checkboxArray[0];
+    expect(checkbox.checked).toBeFalsy();
+    await userEvent.click(checkbox);
+    expect(checkbox.checked).toBeTruthy();
+  });
 
-  //   // ACT
-  //   const checkboxArray = (await screen.findAllByRole(
-  //     "checkbox"
-  //   )) as HTMLInputElement[];
-  //   const checkbox = checkboxArray[0];
-  //   expect(checkbox.checked).toBeFalsy();
-  //   server.use(
-  //     http.put(`/todos/${checkbox.id}`, () => {
-  //       return new HttpResponse(null, { status: 400 });
-  //     })
-  //   );
-  //   await userEvent.click(checkbox);
-  //   waitFor(() => {
-  //     expect(checkbox.checked).toBeTruthy(); // ASSERT
-  //   });
-  // });
+  it("should delete a todo", async () => {
+    render(<TodoList />);
 
-  // it("should delete a todo", async () => {
-  //   render(<TodoList />); // ARRANGE
+    const todoText = await screen.findByText("Get Coffee ☕☕☕");
+    expect(todoText).toBeInTheDocument();
 
-  //   const todoText = await screen.findByText("Write Code 💻");
-  //   expect(todoText).toBeInTheDocument(); // ASSERT
+    const buttons = await screen.findAllByTestId("delete-button");
+    const button = buttons[0];
+    await userEvent.click(button);
 
-  //   // ACT
-  //   const buttons = await screen.findAllByTestId("delete-button");
-  //   const button = buttons[0];
-  //   await userEvent.click(button);
+    expect(todoText).not.toBeInTheDocument();
+  });
 
-  //   expect(todoText).not.toBeInTheDocument(); // ASSERT
-  // });
+  it("should not delete a todo if request fails", async () => {
+    render(<TodoList />);
 
-  // it("should not delete a todo if request fails", async () => {
-  //   render(<TodoList />); // ARRANGE
+    const checkboxArray = (await screen.findAllByRole(
+      "checkbox"
+    )) as HTMLInputElement[];
+    const checkbox = checkboxArray[0];
+    expect(checkbox).toBeInTheDocument();
 
-  //   const checkboxArray = (await screen.findAllByRole(
-  //     "checkbox"
-  //   )) as HTMLInputElement[];
-  //   const checkbox = checkboxArray[0];
-  //   expect(checkbox).toBeInTheDocument();
+    server.use(
+      http.delete(`${SERVER_URL}/${checkbox.id}`, () => {
+        return new HttpResponse(null, { status: 400 });
+      })
+    );
 
-  //   server.use(
-  //     http.delete(`/todos/${checkbox.id}`, () => {
-  //       return new HttpResponse(null, { status: 400 });
-  //     })
-  //   );
+    const buttons = await screen.findAllByTestId("delete-button");
+    const button = buttons[0];
+    await userEvent.click(button);
 
-  //   // ACT
-  //   const buttons = await screen.findAllByTestId("delete-button");
-  //   const button = buttons[0];
-  //   await userEvent.click(button);
-
-  //   const todoText = await screen.findByText("Write Code 💻");
-  //   expect(todoText).toBeInTheDocument(); // ASSERT
-  // });
+    const todoText = await screen.findByText("Get Coffee ☕☕☕");
+    expect(todoText).toBeInTheDocument();
+  });
 });

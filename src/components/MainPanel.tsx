@@ -7,7 +7,7 @@ preload(cacheKey, getTodos);
 
 export default function MainPanel() {
   return (
-    <div className="p-4">
+    <div className="p-4 bg-white">
       <TodoList />
     </div>
   );

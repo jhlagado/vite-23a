@@ -37,7 +37,6 @@ export const TodoList = () => {
     try {
       await mutate(updateTodoMutation(updatedTodo, todos), {
         optimisticData: updateTodoUtility(updatedTodo, todos),
-        revalidate: false,
       });
       toast.success("Success! Updated item", {
         duration: 2000,
@@ -74,7 +73,7 @@ export const TodoList = () => {
   };
 
   return (
-    <main className="m-auto max-w-7xl bg-slate-200 px-4 py-8 rounded-md shadow-md">
+    <main className="m-auto bg-slate-200 px-4 py-8 rounded-md shadow-md">
       <Toaster toastOptions={{ position: "top-center" }} />
       <h1>Todo List</h1>
       <AddTodo handleSubmit={handleSubmit} />

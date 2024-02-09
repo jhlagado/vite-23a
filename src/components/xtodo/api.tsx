@@ -17,7 +17,7 @@ export type Todo = {
 
 export const getTodos = async (): Promise<Todo[]> => {
   // await delay();
-  const response = await fetch(`${SERVER_URL}?_sort=-created`);
+  const response = await fetch(`${SERVER_URL}?_sort=-completed,-created`);
   return await response.json();
 };
 
