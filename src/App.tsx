@@ -1,13 +1,14 @@
-import MainPanel from "./components/MainPanel";
 import SideBar from "./components/SideBar";
+import { TodoList } from "./components/xtodo/TodoList";
 
 function App() {
   return (
-    <div className="flex">
+    <div className="flex size-1.5 bg-slate-500">
       <SideBar />
-      <MainPanel />
+      <TodoList />
     </div>
   );
 }
 
 export default App;
+

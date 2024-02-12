@@ -136,3 +136,7 @@ npm i -D @storybook/addon-a11y
 
 npm i -D eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin
 npx eslint --init
+
+# Install React Router
+
+npm install react-router-dom localforage match-sorter sort-by

@@ -73,9 +73,8 @@ export const TodoList = () => {
   };
 
   return (
-    <main className="m-auto bg-slate-200 px-4 py-8 rounded-md shadow-md">
+    <main className="flex flex-col text-lg">
       <Toaster toastOptions={{ position: "top-center" }} />
-      <h1>Todo List</h1>
       <AddTodo handleSubmit={handleSubmit} />
       {isLoading && <p>Loading...</p>}
       {error && <p>{error.message}</p>}

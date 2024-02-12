@@ -9,8 +9,8 @@ export const AddTodo: FC<Props> = ({ handleSubmit }) => {
   const [text, setText] = useState("");
   return (
     <form
-      className=""
-      onSubmit={(e: React.FormEvent) => {
+    className="flex p-4 justify-between items-center bg-slate-100 border-2 border-solid border-slate-200"
+    onSubmit={(e: React.FormEvent) => {
         e.preventDefault();
         handleSubmit(text);
         setText("");
