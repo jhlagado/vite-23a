@@ -75,24 +75,26 @@ export const Resume = () => {
           <li>API Gateway</li>
           <li>Automated Testing</li>
           <li>BitBucket</li>
-          <li>CMS</li>
+          <li>Chrome extensions</li>
           <li>Continuous Delivery</li>
           <li>CSS / Animation</li>
+          <li>ESLint</li>
           <li>Git</li>
           <li>Github</li>
           <li>GraphQL</li>
           <li>Harvest</li>
           <li>HTML</li>
           <li>Javascript</li>
-          <li>Jenkins</li>
           <li>Jest</li>
           <li>JIRA</li>
           <li>Microservices</li>
           <li>MobX</li>
+          <li>MSW</li>
           <li>NextJS</li>
           <li>NodeJS</li>
           <li>Pair Programming</li>
           <li>People Management</li>
+          <li>React Router</li>
           <li>Redux</li>
           <li>Responsive Design</li>
           <li>REST</li>
@@ -100,12 +102,15 @@ export const Resume = () => {
           <li>Sprint Planning</li>
           <li>Storybook</li>
           <li>Style Components</li>
+          <li>SWR</li>
           <li>Tailwind</li>
-          <li>Team Leadership</li>
           <li>TDD</li>
+          <li>Team Leadership</li>
           <li>Typescript</li>
           <li>User stories</li>
+          <li>Vite / Vitest</li>
           <li>Web development</li>
+          <li>WCAG</li>
         </ul>
       </section>
       <section className="experience">
@@ -243,10 +248,10 @@ export const Resume = () => {
           <li>
             <MdDiamond size={48} />
             <div>
-            <h4>Retro-computing, electronics</h4>
-            <a href="https://github.com/tec1group">
-              https://github.com/tec1group
-            </a>
+              <h4>Retro-computing, electronics</h4>
+              <a href="https://github.com/tec1group">
+                https://github.com/tec1group
+              </a>
             </div>
           </li>
           <li>

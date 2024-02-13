@@ -85,7 +85,7 @@
       }
       
       svg {
-        @apply float-left mr-1
+        @apply mr-1
       }
   
       div {
