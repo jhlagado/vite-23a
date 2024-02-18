@@ -21,89 +21,8 @@
     h3{
       @apply text-2xl text-blue-900 font-extrabold uppercase mb-4 mt-8
     }
-
-    .bullets {
-      @apply list-disc list-inside text-sm
-    }
-
-    .contact {
-      ul {
-        @apply grid grid-cols-3 text-xs font-bold my-4 
-      }
-      li,div {
-        @apply whitespace-nowrap
-      }
-      li,div {
-        svg {
-          @apply text-orange-500 inline-block mr-1 
-        }
-      }
-    }
-
-    .skills {
-
-      ul {
-        @apply -mx-1
-      }
-
-      li {
-        @apply inline-block font-bold border border-solid px-2 py-2 m-1
-      }
-
-    }
-
-    .experience  {
-
-      dl {
-        @apply grid grid-cols-4
-      }
-
-      dt h4 {
-          @apply text-sm font-bold text-blue-900 mb-3
-      }
-
-      dd {
-        h4 {
-          @apply text-blue-900 text-xl font-medium
-        }
-  
-        h5 {
-          @apply text-orange-600 text-lg font-semibold mb-1
-        }
-        @apply col-span-3 border-l border-l-slate-500 pl-4 mb-6
-      }
-  
-    }
-
-    .interests  {
-      ul {
-        @apply grid grid-cols-2
-      }
-  
-      li {
-        @apply grid grid-cols-4
-      }
-      
-      svg {
-        @apply mr-1
-      }
-  
-      div {
-        @apply col-span-3
-      }
-  
-      h4 {
-        @apply text-blue-900 text-xl font-medium
-      }
-    }
-
-    .references p {
-      @apply text-lg
-    }
-
   }
 }
-
 @layer components {
   .sidebar-icon {
     @apply relative flex items-center justify-center 

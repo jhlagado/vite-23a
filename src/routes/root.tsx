@@ -71,12 +71,12 @@ export default function Root() {
             <ul>
               <li>
                 <NavLink
-                  to={`resume`}
+                  to={`experiments`}
                   className={({ isActive, isPending }) =>
                     isActive ? "active" : isPending ? "pending" : ""
                   }
                 >
-                  Resume
+                  Experiments
                 </NavLink>
               </li>
               {contacts.map((contact) => (

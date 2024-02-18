@@ -18,7 +18,7 @@ import {
 import EditContact, { action as editAction } from "./routes/edit";
 import { action as destroyAction } from "./routes/destroy";
 import Index from "./routes";
-import { Resume } from "./routes/resume";
+import { Experiments } from "./routes/experiments";
 
 const router = createBrowserRouter(
   [
@@ -50,8 +50,8 @@ const router = createBrowserRouter(
               action: destroyAction,
             },
             {
-              path: "resume",
-              element: <Resume />,
+              path: "experiments",
+              element: <Experiments />,
             },
           ],
         },
