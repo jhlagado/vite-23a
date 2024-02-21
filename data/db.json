@@ -1,4 +1,41 @@
 {
+  "contacts": [
+    {
+      "id": "1",
+      "createdAt": 1708478803349,
+      "first": "John!!",
+      "last": "Hardy",
+      "favorite": false,
+      "twitter": "",
+      "avatar": "https://0.gravatar.com/avatar/48dd18d75649280ac9ce06c27e87474b23bf23a2c123ab066e1be411f3042e99?size=512",
+      "notes": "1223"
+    },
+    {
+      "id": "3972",
+      "createdAt": 1708478803349,
+      "favorite": true,
+      "first": "J",
+      "last": "H",
+      "notes": "11",
+      "twitter": "11"
+    },
+    {
+      "id": "1d3a",
+      "createdAt": 1708478822845,
+      "favorite": false,
+      "first": "K",
+      "last": "J",
+      "notes": "122333",
+      "twitter": "@123"
+    },
+    {
+      "id": "b991",
+      "createdAt": 1708516669687,
+      "first": "New",
+      "last": "Person",
+      "favorite": true
+    }
+  ],
   "todos": [
     {
       "id": "28d2",

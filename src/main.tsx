@@ -1,23 +1,15 @@
-import * as React from "react";
-import * as ReactDOM from "react-dom/client";
+import { StrictMode, Suspense, useEffect } from "react";
+import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import '@fontsource-variable/montserrat';
+import { Middleware, mutate, SWRConfig } from "swr";
+import "@fontsource-variable/montserrat";
 import "./index.css";
 
-import Root, {
-  loader as rootLoader,
-  action as rootAction,
-} from "./routes/root";
 import ErrorPage from "./error-page";
-import Contact from "./routes/contact";
-
-import {
-  loader as contactLoader,
-  action as contactAction,
-} from "./routes/contact";
-import EditContact, { action as editAction } from "./routes/edit";
-import { action as destroyAction } from "./routes/destroy";
 import Index from "./routes";
+import Root from "./routes/root";
+import ViewContact from "./routes/view";
+import EditContact from "./routes/edit";
 import { Experiments } from "./routes/experiments";
 
 const router = createBrowserRouter(
@@ -26,8 +18,6 @@ const router = createBrowserRouter(
       path: "/",
       element: <Root />,
       errorElement: <ErrorPage />,
-      loader: rootLoader,
-      action: rootAction,
       children: [
         {
           errorElement: <ErrorPage />,
@@ -35,19 +25,11 @@ const router = createBrowserRouter(
             { index: true, element: <Index /> },
             {
               path: "contacts/:contactId",
-              element: <Contact />,
-              loader: contactLoader,
-              action: contactAction,
+              element: <ViewContact />,
             },
             {
               path: "contacts/:contactId/edit",
               element: <EditContact />,
-              loader: contactLoader,
-              action: editAction,
-            },
-            {
-              path: "contacts/:contactId/destroy",
-              action: destroyAction,
             },
             {
               path: "experiments",
@@ -63,8 +45,38 @@ const router = createBrowserRouter(
   }
 );
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <RouterProvider router={router} />
-  </React.StrictMode>
+const liveQueries = new Set();
+
+export const revalidateLiveQueries = async () => {
+  return Promise.all(
+    [...liveQueries.values()].map((key) => mutate(key as string))
+  );
+};
+
+const trackLiveQueries: Middleware = (useSWRNext) => (key, fetcher, config) => {
+  useEffect(() => {
+    liveQueries.add(key as string);
+    return () => {
+      liveQueries.delete(key);
+    };
+  }, [key]);
+  return useSWRNext(key, fetcher, config);
+};
+
+const FallbackProgress = () => <div>Loading...</div>;
+
+createRoot(document.getElementById("root")!).render(
+  <StrictMode>
+    <SWRConfig
+      value={{
+        fetcher: (input, init?) => fetch(input, init).then((res) => res.json()),
+        use: [trackLiveQueries],
+        suspense: true,
+      }}
+    >
+      <Suspense fallback={<FallbackProgress />}>
+        <RouterProvider router={router} />
+      </Suspense>
+    </SWRConfig>
+  </StrictMode>
 );

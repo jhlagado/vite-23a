@@ -1,8 +1,7 @@
-import { memo, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const Component = ({ value }: { value: number }) => {
   const ref = useRef(false);
-  if (!ref.current) console.log("render");
   ref.current = true;
   return <div>{value}</div>;
 };
@@ -15,7 +14,6 @@ export const Experiments = () => {
   useEffect(() => {
     if (!ref.current) {
       setValue(123);
-      console.log("hello");
     }
     return () => {
       ref.current = true;

@@ -1,25 +1,46 @@
-import {
-  ActionFunctionArgs,
-  Form,
-  redirect,
-  useLoaderData,
-  useNavigate,
-} from "react-router-dom";
-import { Contact, updateContact } from "../contacts";
-
-export async function action({ request, params }: ActionFunctionArgs) {
-  const formData = await request.formData();
-  const updates = Object.fromEntries(formData);
-  await updateContact(params.contactId!, updates);
-  return redirect(`/contacts/${params.contactId}`);
-}
+import { Form, useNavigate, useParams } from "react-router-dom";
+import { Contact, updateContact, useContact } from "../lib/contacts";
+import { revalidateLiveQueries } from "../main";
+import { useEffect, useState } from "react";
+import Spinner from "../components/spinner";
 
 export default function EditContact() {
-  const { contact } = useLoaderData() as { contact: Contact };
+  let { contactId } = useParams();
+  if (!contactId) return null;
+  const [isSaving, setIsSaving] = useState(false);
+  const [contact, setContact] = useState<Contact>({
+    first: "",
+    last: "",
+    favorite: false,
+    twitter: "",
+    avatar: "",
+    notes: "",
+  });
   const navigate = useNavigate();
+  const { data } = useContact(contactId);
+  if (!data) return null;
+
+  useEffect(() => {
+    setContact(data);
+  }, [data]);
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    setIsSaving(true);
+    await updateContact(contactId!, contact);
+    await revalidateLiveQueries();
+    navigate(`/contacts/${contactId}`);
+  };
+
+  const handleChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = event.target;
+    setContact((values) => ({ ...values, [name]: value }));
+  };
 
   return (
-    <Form method="post" id="contact-form">
+    <Form method="post" id="contact-form" onSubmit={handleSubmit}>
       <p>
         <span>Name</span>
         <input
@@ -27,14 +48,16 @@ export default function EditContact() {
           aria-label="First name"
           type="text"
           name="first"
-          defaultValue={contact.first}
+          value={contact.first}
+          onChange={handleChange}
         />
         <input
           placeholder="Last"
           aria-label="Last name"
           type="text"
           name="last"
-          defaultValue={contact.last}
+          value={contact.last}
+          onChange={handleChange}
         />
       </p>
       <label>
@@ -43,7 +66,8 @@ export default function EditContact() {
           type="text"
           name="twitter"
           placeholder="@jack"
-          defaultValue={contact.twitter}
+          value={contact.twitter}
+          onChange={handleChange}
         />
       </label>
       <label>
@@ -53,15 +77,23 @@ export default function EditContact() {
           aria-label="Avatar URL"
           type="text"
           name="avatar"
-          defaultValue={contact.avatar}
+          value={contact.avatar}
+          onChange={handleChange}
         />
       </label>
       <label>
         <span>Notes</span>
-        <textarea name="notes" defaultValue={contact.notes} rows={6} />
+        <textarea
+          name="notes"
+          value={contact.notes}
+          onChange={handleChange}
+          rows={6}
+        />
       </label>
       <p>
-        <button type="submit">Save</button>
+        <button type="submit">
+          {!isSaving ? "Save" : <Spinner className="h-4 w-4 text-slate-500" />}
+        </button>
         <button
           type="button"
           onClick={() => {

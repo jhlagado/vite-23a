@@ -1,70 +1,57 @@
-import {
-  Outlet,
-  useLoaderData,
-  Form,
-  redirect,
-  NavLink,
-  useNavigation,
-  LoaderFunctionArgs,
-  useSubmit,
-} from "react-router-dom";
-import { Contact, getContacts, createContact } from "../contacts";
-import { useEffect } from "react";
-
-export async function loader({ request }: LoaderFunctionArgs) {
-  const url = new URL(request.url);
-  const q = url.searchParams.get("q") || undefined;
-  const contacts = await getContacts(q);
-  return { contacts, q };
-}
-
-export async function action() {
-  const contact = await createContact();
-  return redirect(`/contacts/${contact.id}/edit`);
-}
+import { Outlet, NavLink, useNavigate, useParams } from "react-router-dom";
+import { Contact, createContact, useContacts } from "../lib/contacts";
+import { ChangeEvent, useEffect, useState } from "react";
+import { matchSorter } from "match-sorter";
+import { revalidateLiveQueries } from "../main";
 
 export default function Root() {
-  const { contacts, q } = useLoaderData() as { contacts: Contact[]; q: string };
-  const navigation = useNavigation();
-  const submit = useSubmit();
+  const { q = "" } = useParams();
+  const navigate = useNavigate();
+  const [search, setSearch] = useState("");
+  const [contacts, setContacts] = useState<Contact[]>([]);
 
-  const searching =
-    navigation.location &&
-    new URLSearchParams(navigation.location.search).has("q");
+  const { data } = useContacts();
 
   useEffect(() => {
-    const elem = document.getElementById("q");
-    // if (elem == null) return;
-    (elem as HTMLInputElement).value = q || "";
+    setSearch(q);
   }, [q]);
 
+  useEffect(() => {
+    if (!data) return;
+    setContacts(
+      search ? matchSorter(data, search, { keys: ["first", "last"] }) : data
+    );
+  }, [data, search]);
+
+  const handleCreate = async () => {
+    const created = await createContact();
+    await revalidateLiveQueries();
+    navigate(`/contacts/${created.id}/edit`);
+  };
+
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setSearch(event.target.value);
+  };
+
+  if (!contacts) return null;
   return (
     <>
       <div id="sidebar">
         <h1>React Router Contacts</h1>
         <div>
-          <form id="search-form" role="search">
-            <input
-              id="q"
-              aria-label="Search contacts"
-              placeholder="Search"
-              type="search"
-              name="q"
-              className={searching ? "loading" : ""}
-              defaultValue={q}
-              onChange={(event) => {
-                const isFirstSearch = q == null;
-                submit(event.currentTarget.form, {
-                  replace: !isFirstSearch,
-                });
-              }}
-            />
-            <div id="search-spinner" aria-hidden hidden={!searching} />
-            <div className="sr-only" aria-live="polite"></div>
-          </form>
-          <Form method="post">
-            <button type="submit">New</button>
-          </Form>
+          <input
+            aria-label="Search contacts"
+            placeholder="Search"
+            type="text"
+            name="search"
+            value={search}
+            onChange={handleChange}
+          />
+          {/* <div id="search-spinner" aria-hidden hidden={!searching} />
+            <div className="sr-only" aria-live="polite"></div> */}
+          <button type="button" onClick={handleCreate}>
+            New
+          </button>
         </div>
         <nav>
           {contacts.length ? (
