@@ -11,6 +11,7 @@ import Root from "./routes/root";
 import ViewContact from "./routes/view";
 import EditContact from "./routes/edit";
 import { Experiments } from "./routes/experiments";
+import ContactsRoot from "./routes/contacts-root";
 
 const router = createBrowserRouter(
   [
@@ -24,12 +25,20 @@ const router = createBrowserRouter(
           children: [
             { index: true, element: <Index /> },
             {
-              path: "contacts/:contactId",
-              element: <ViewContact />,
-            },
-            {
-              path: "contacts/:contactId/edit",
-              element: <EditContact />,
+              path: "contacts/",
+              element: <ContactsRoot />,
+              errorElement: <ErrorPage />,
+              children: [
+                { index: true, element: <Index /> },
+                {
+                  path: ":contactId",
+                  element: <ViewContact />,
+                },
+                {
+                  path: ":contactId/edit",
+                  element: <EditContact />,
+                },
+              ],
             },
             {
               path: "experiments",
